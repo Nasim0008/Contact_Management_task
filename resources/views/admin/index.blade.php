@@ -18,6 +18,14 @@
         </div>
     @endif
 
+
+    <form action="{{ route('admin.logout') }}" method="GET" style="display: inline-block; margin-top: 10px;">
+        <button type="submit"
+            style="padding: 8px 16px; background-color: #ef4444; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Logout
+        </button>
+    </form>
+
     <!-- Search Form -->
     <div style="display: flex; justify-content: flex-end; padding: 20px;">
         <form action="{{ route('admin.search') }}" method="get" style="display: flex; gap: 10px;">
