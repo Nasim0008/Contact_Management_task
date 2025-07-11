@@ -11,9 +11,8 @@ class AdminAuthMiddleware
 
     public function handle(Request $request, Closure $next): Response
     {
-
-        if (!$request->session()->has('is_admin_logged_in')) {
-            return redirect()->route('admin.login')->with('error', 'Unauthorized access');
+        if (!session()->has('admin_id')) {
+            return redirect()->route('admin.login')->with('error', 'You must login first.');
         }
         return $next($request);
     }

@@ -2,11 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
 
 class AdminLoginController extends Controller
 {
+
+    public function showRegister()
+    {
+        return view('admin.reg');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+
+            'name' => 'required',
+            'email' => 'required|email|unique:admins,email',
+            'password' => 'required|confirmed',
+        ]);
+
+        Admin::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        return redirect()->route('admin.login')->with('success', 'Registration successful!');
+    }
+
     public function showLogin()
     {
         return view('admin.login');
@@ -15,24 +39,26 @@ class AdminLoginController extends Controller
     public function doLogin(Request $request)
     {
         $request->validate([
-            'username' => 'required',
+            'email' => 'email|required',
             'password' => 'required',
         ]);
 
-        $username = 'admin';
-        $password = 'admin';
+        $admin = Admin::where('email', $request->email)->first();
 
-        if ($request->username === $username && $request->password === $password) {
-            $request->session()->put('is_admin_logged_in', true);
-            return redirect()->route('admin.index');
+        if (!$admin) {
+            return redirect()->route('admin.register')->with('error', 'Admin not Found');
         }
 
-        return redirect()->route('admin.login')->with('error', 'Invalid Username or Password');
+        if ($admin && Hash::check($request->password, $admin->password)) {
+            session(['admin_id' => $admin->id]);
+            return redirect()->route('admin.index')->with('success', 'Login successful!');
+        }
+        return redirect()->route('admin.login')->with('error', 'Invalid  Password');
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        $request->session()->forget('is_admin_logged_in');
+        session()->forget('admin_id');
         return redirect()->route('admin.login');
     }
 }

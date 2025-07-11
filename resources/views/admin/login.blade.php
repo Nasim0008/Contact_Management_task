@@ -36,7 +36,8 @@
         }
 
         input[type="text"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="email"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 12px;
@@ -44,10 +45,27 @@
             border-radius: 5px;
         }
 
-        span {
+        .error-message {
             color: red;
             font-size: 14px;
             display: block;
+            margin-bottom: 10px;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #c3e6cb;
+            background-color: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .session-error {
+            text-align: center;
+            color: red;
             margin-bottom: 10px;
         }
 
@@ -65,37 +83,36 @@
         button:hover {
             background-color: #1d4ed8;
         }
-
-        p {
-            text-align: center;
-            color: red;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 
 <body>
 
-
-
     <form action="{{ route('admin.doLogin') }}" method="POST">
         @csrf
         <h2>Admin Login</h2>
-        @if (session('error'))
-            <p>{{ session('error') }}</p>
+
+        @if (session()->has('success'))
+            <div class="success-message">
+                {{ session('success') }}
+            </div>
         @endif
 
-        <label for="username">Username:</label>
-        <input type="text" id="username" placeholder="Enter Username" name="username" required>
-        <span>
-            @error('username')
+        @if (session('error'))
+            <p class="session-error">{{ session('error') }}</p>
+        @endif
+
+        <label for="email">Username:</label>
+        <input type="email" id="email" placeholder="Enter Email" name="email">
+        <span class="error-message">
+            @error('email')
                 {{ $message }}
             @enderror
         </span>
 
         <label for="password">Password:</label>
-        <input type="password" id="password" placeholder="Enter Password" name="password" required>
-        <span>
+        <input type="password" id="password" placeholder="Enter Password" name="password">
+        <span class="error-message">
             @error('password')
                 {{ $message }}
             @enderror

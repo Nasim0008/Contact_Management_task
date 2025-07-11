@@ -17,7 +17,12 @@
             {{ session('success') }}
         </div>
     @endif
-
+    <div style="margin: 20px 0; text-align: left;">
+        <a href="{{ route('user.create') }}"
+            style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; font-size: 14px; border-radius: 5px; font-weight: 600; border: none; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: background-color 0.3s;">
+            Add Contact
+        </a>
+    </div>
 
     <form action="{{ route('admin.logout') }}" method="GET" style="display: inline-block; margin-top: 10px;">
         <button type="submit"
@@ -25,6 +30,19 @@
             Logout
         </button>
     </form>
+
+
+    <div style="margin: 20px 0; text-align: right;">
+        <form action="{{ route('admin.deleteAll') }}" method="POST"
+            onsubmit="return confirm('Are you sure you want to delete all contact records?');" style="display: inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit"
+                style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                Delete All Employees
+            </button>
+        </form>
+    </div>
 
     <!-- Search Form -->
     <div style="display: flex; justify-content: flex-end; padding: 20px;">

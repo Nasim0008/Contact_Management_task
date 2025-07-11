@@ -23,7 +23,7 @@ class ContactController extends Controller
         ]);
 
         Contact::create($data);
-        return redirect()->route('user.create')->with('success', 'Contact submited Successfully');
+        return redirect()->route('admin.index')->with('success', 'Contact submited Successfully');
     }
 
     public function confirmation()
@@ -59,5 +59,11 @@ class ContactController extends Controller
     {
         $contacts = Contact::where('name', 'like', '%' . $request->search . '%')->paginate(10);
         return view('admin.index', compact('contacts'));
+    }
+
+    public function deleteAll()
+    {
+        Contact::truncate();
+        return redirect()->route('admin.index')->with('success', 'All contact deleted successfully.');
     }
 }
